@@ -10,6 +10,7 @@
 #include "net.h"
 #include "platform.h"
 #include "util.h"
+#include "icmp.h"
 
 struct ip_hdr {
     uint8_t vhl;
