@@ -304,7 +304,7 @@ static ssize_t ip_output_core(struct ip_iface *iface, uint8_t protocol,
     hdr->sum = cksum16((uint16_t *)hdr, hlen << 2, 0);
 
     total = hlen << 2;
-    memcpy(buf, hdr, total);
+    memcpy(buf, hdr, total);  // 無くてもhdr = (struct ip_hdr *)buf; ここで同じポインタを指してるから問題ない説
     memcpy(buf + total, data, len);
     total += len;
 
