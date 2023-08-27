@@ -2,6 +2,9 @@ SRCS := $(wildcard src/*.c)
 OBJS := $(patsubst src/%.c, obj/%.o, $(SRCS))
 INCS := $(wildcard inc/*.h)
 
+TESTS := $(wildcard tests/*.c)
+TEST_EXE := $(patsubst tests/%.c, tests/%, $(TESTS))
+
 ifeq ($(shell uname), Linux)
 	CC := gcc
 	CFLAGS := -g -Wall -Wextra -pthread -std=c11 -I inc
@@ -18,15 +21,20 @@ endif
 
 .PHONY: clean
 
-all: microps
+all: microps test
 
 microps: $(OBJS)
-	$(CC) $(OBJS) $(CFLAGS) -o $@
+	$(CC) main.c $(OBJS) $(CFLAGS) -o $@
 
 obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJS): $(INCS)
 
+test : $(TEST_EXE)
+
+tests/% : tests/%.c $(OBJS)
+	$(CC) $(CFLAGS) $< $(OBJS) -o $@
+
 clean:
-	rm -f microps $(OBJS)
+	rm -f microps $(OBJS) $(TEST_EXE)
