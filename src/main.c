@@ -1,6 +1,9 @@
-#include <stdio.h>
+#include "util.h"
 
 int main() {
-    printf("Hello, World!");
+    debugf("Hello, World!");
+    infof("Hello, World!");
+    warnf("Hello, World!");
+    errorf("Hello, World!");
     return 0;
 }

@@ -4,7 +4,7 @@ INCS := $(wildcard inc/*.h)
 
 ifeq ($(shell uname), Linux)
 	CC := gcc
-	CFLAGS := -g -Wall -Wextra -pthread -std=c11
+	CFLAGS := -g -Wall -Wextra -pthread -std=c11 -I inc
 	LINUX_SRCS := $(wildcard src/linux/*.c)
 	SRCS += $(LINUX_SRCS)
 	OBJS += $(patsubst src/linux/%.c, obj/%.o, $(LINUX_SRCS))
