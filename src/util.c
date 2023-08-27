@@ -77,3 +77,60 @@ void hexdump(FILE *stream, const void *data, size_t size) {
     fprintf(stream, "+------+-------------------------------------------------+------------------+\n");
     funlockfile(stream);
 }
+
+// byteorder
+
+enum byteorder {
+    BYTEORDER_LITTLE_ENDIAN,
+    BYTEORDER_BIG_ENDIAN,
+    BYTEORDER_UNKNOWN
+};
+
+static enum byteorder endian = BYTEORDER_UNKNOWN;
+
+static enum byteorder get_byteorder() {
+    uint32_t x = 0x00000001;
+    uint8_t *p = (uint8_t *)&x;
+    return (p[0] == 0x01) ? BYTEORDER_LITTLE_ENDIAN : BYTEORDER_BIG_ENDIAN;
+}
+
+static uint16_t byte_swap16(uint16_t x) {
+    return (x & 0x00ff) << 8 | (x & 0xff00) >> 8;
+}
+
+static uint32_t byte_swap32(uint32_t x) {
+    return (x & 0x000000ff) << 24 | (x & 0x0000ff00) << 8 |
+           (x & 0x00ff0000) >> 8  | (x & 0xff000000) >> 24;
+}
+
+// host to network byte order conversion (16bit)
+uint16_t hton16(uint16_t x) {
+    if (endian == BYTEORDER_UNKNOWN) {
+        endian = get_byteorder();
+    }
+    return (endian == BYTEORDER_LITTLE_ENDIAN) ? byte_swap16(x) : x;
+}
+
+// host to network byte order conversion (32bit)
+uint32_t hton32(uint32_t x) {
+    if (endian == BYTEORDER_UNKNOWN) {
+        endian = get_byteorder();
+    }
+    return (endian == BYTEORDER_LITTLE_ENDIAN) ? byte_swap32(x) : x;
+}
+
+// network to host byte order conversion (16bit)
+uint16_t ntoh16(uint16_t x) {
+    if (endian == BYTEORDER_UNKNOWN) {
+        endian = get_byteorder();
+    }
+    return (endian == BYTEORDER_LITTLE_ENDIAN) ? byte_swap16(x) : x;
+}
+
+// network to host byte order conversion (32bit)
+uint32_t ntoh32(uint32_t x) {
+    if (endian == BYTEORDER_UNKNOWN) {
+        endian = get_byteorder();
+    }
+    return (endian == BYTEORDER_LITTLE_ENDIAN) ? byte_swap32(x) : x;
+}

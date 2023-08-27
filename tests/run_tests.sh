@@ -5,3 +5,6 @@ echo "---- logging ----"
 
 echo "---- hexdump ----"
 ./tests/hexdump
+
+echo "--- byteorder ---"
+./tests/byteorder
