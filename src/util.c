@@ -2,7 +2,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdarg.h>
+#include <ctype.h>
 #include <time.h>
 #include <sys/time.h>
 
@@ -41,4 +43,37 @@ int lprintf(FILE *stream, int level, const char *file, int line, const char *fun
     n += fprintf(stream, " (%s%s:%d%s)\n", ANSI_CYAN, file, line, ANSI_RESET);
     funlockfile(stream);
     return n;
+}
+
+void hexdump(FILE *stream, const void *data, size_t size) {
+    unsigned char *src;
+
+    flockfile(stream);
+    src = (unsigned char *)data;
+    fprintf(stream, "+------+-------------------------------------------------+------------------+\n");
+    for (int offset = 0; offset < (int)size; offset += 16) {
+        fprintf(stream, "| %04x | ", offset);
+        for (int index = 0; index < 16; index++) {
+            if (offset + index < (int)size) {
+                fprintf(stream, "%02x ", 0xff & src[offset + index]);
+            } else {
+                fprintf(stream, "   ");
+            }
+        }
+        fprintf(stream, "| ");
+        for (int index = 0; index < 16; index++) {
+            if (offset + index < (int)size) {
+                if (isascii(src[offset + index]) && isprint(src[offset + index])) {
+                    fprintf(stream, "%c", src[offset + index]);
+                } else {
+                    fprintf(stream, ".");
+                }
+            } else {
+                fprintf(stream, " ");
+            }
+        }
+        fprintf(stream, " |\n");
+    }
+    fprintf(stream, "+------+-------------------------------------------------+------------------+\n");
+    funlockfile(stream);
 }

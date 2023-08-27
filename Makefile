@@ -7,7 +7,7 @@ TEST_EXE := $(patsubst tests/%.c, tests/%, $(TESTS))
 
 ifeq ($(shell uname), Linux)
 	CC := gcc
-	CFLAGS := -g -Wall -Wextra -pthread -std=c11 -I inc
+	CFLAGS := -g -Wall -Wextra -pthread -std=gnu11 -I inc
 	LINUX_SRCS := $(wildcard src/linux/*.c)
 	SRCS += $(LINUX_SRCS)
 	OBJS += $(patsubst src/linux/%.c, obj/%.o, $(LINUX_SRCS))
