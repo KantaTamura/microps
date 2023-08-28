@@ -13,9 +13,16 @@
 #define ANSI_BLUE   "\e[34m"
 #define ANSI_CYAN   "\e[36m"
 
+// compare
+
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
+
 // array
 
 #define countof(x) ((sizeof(x) / sizeof(*x)))
+#define tailof(x) (x + countof(x))
+#define indexof(x, y) (((uintptr_t)y - (uintptr_t)x) / sizeof(*y))
 
 // logging
 
