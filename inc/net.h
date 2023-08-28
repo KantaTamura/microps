@@ -21,6 +21,9 @@
 typedef struct net_device net_device;
 typedef struct net_device_ops net_device_ops;
 
+#define NET_DEVICE_IS_UP(x) ((x)->flags & NET_DEVICE_FLAG_UP)
+#define NET_DEVICE_STATE(x) (NET_DEVICE_IS_UP(x) ? "up" : "down")
+
 /// network device structure
 struct net_device {
     struct net_device *next;    // next device
@@ -50,5 +53,15 @@ struct net_device_ops {
     // dst: destination address
     int (*transmit)(net_device *dev, uint16_t type, const uint8_t *data, size_t size, const void *dst);
 };
+
+extern struct net_device *net_device_alloc();
+extern int net_device_register(struct net_device *dev);
+extern int net_device_output(struct net_device *dev, uint16_t type, const uint8_t *data, size_t len, const void *dst);
+
+extern int net_input_handler(uint16_t type, const uint8_t *data, size_t len, struct net_device *dev);
+
+extern int net_run();
+extern void net_shutdown();
+extern int net_init();
 
 #endif //MICROPS_NET_H
