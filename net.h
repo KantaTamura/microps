@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <sys/time.h>
 
 // interface name length
 #ifndef IFNAMSIZ
@@ -93,6 +94,9 @@ extern int net_device_add_iface(struct net_device *dev,
                                 struct net_iface *iface);
 extern struct net_iface *net_device_get_iface(struct net_device *dev,
                                               int family);
+
+extern int net_timer_register(struct timeval interval, void (*handler)(void));
+extern int net_timer_handler(void);
 
 extern int net_input_handler(uint16_t type, const uint8_t *data, size_t len,
                              struct net_device *dev);
