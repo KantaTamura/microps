@@ -11,3 +11,6 @@ echo "--- byteorder ---"
 
 echo "--- checksum ----"
 ./tests/checksum
+
+echo "----- queue -----"
+./tests/queue

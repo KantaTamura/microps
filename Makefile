@@ -7,11 +7,11 @@ TEST_EXE := $(patsubst tests/%.c, tests/%, $(TESTS))
 
 ifeq ($(shell uname), Linux)
 	CC := gcc
-	CFLAGS := -g -Wall -Wextra -pthread -std=gnu11 -I inc
-	LINUX_SRCS := $(wildcard src/linux/*.c)
+	CFLAGS := -g -Wall -Wextra -pthread -std=gnu11 -I inc -I inc/platform/linux
+	LINUX_SRCS := $(wildcard src/platform/linux/*.c)
 	SRCS += $(LINUX_SRCS)
-	OBJS += $(patsubst src/linux/%.c, obj/%.o, $(LINUX_SRCS))
-	INCS += $(wildcard inc/linux/*.h)
+	OBJS += $(patsubst src/platform/linux/%.c, obj/%.o, $(LINUX_SRCS))
+	INCS += $(wildcard inc/platform/linux/*.h)
 else
 	$(error "unsupported platform")
 endif

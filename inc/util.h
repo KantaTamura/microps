@@ -33,6 +33,23 @@
 extern int lprintf(FILE *stream, int level, const char *file, int line, const char *func, const char *fmt, ...);
 extern void hexdump(FILE *stream, const void *data, size_t size);
 
+// queue
+
+typedef struct queue_entry queue_entry;
+typedef struct queue_head queue_head;
+
+struct queue_head {
+    queue_entry *head;
+    queue_entry *tail;
+    unsigned int num;
+};
+
+extern void queue_init(queue_head *queue);
+extern void *queue_push(queue_head *queue, void *data);
+extern void *queue_pop(queue_head *queue);
+extern void *queue_peek(queue_head *queue);
+extern void queue_foreach(queue_head *queue, void (*func)(void *arg, void *data), void *arg);
+
 // byteorder
 
 extern uint16_t hton16(uint16_t x);

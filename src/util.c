@@ -6,6 +6,8 @@
 #include <time.h>
 #include <sys/time.h>
 
+#include "platform.h"
+
 // logging
 
 int lprintf(FILE *stream, int level, const char *file, int line, const char *func, const char *fmt, ...) {
@@ -66,6 +68,89 @@ void hexdump(FILE *stream, const void *data, size_t size) {
     }
     fprintf(stream, "+------+-------------------------------------------------+------------------+\n");
     funlockfile(stream);
+}
+
+// queue
+
+struct queue_entry {
+    queue_entry *next;
+    void *data;
+};
+
+void queue_init(queue_head *queue) {
+    queue->head = NULL;
+    queue->tail = NULL;
+    queue->num = 0;
+}
+
+void *queue_push(queue_head *queue, void *data) {
+    queue_entry *entry;
+
+    if (!queue) {
+        errorf("queue is NULL");
+        return NULL;
+    }
+    if ((entry = memory_alloc(sizeof(queue_entry))) == NULL) {
+        errorf("memory_alloc() failed");
+        return NULL;
+    }
+
+    entry->next = NULL;
+    entry->data = data;
+
+    if (queue->tail) {
+        queue->tail->next = entry;
+    }
+    queue->tail = entry;
+
+    if (!queue->head) {
+        queue->head = entry;
+    }
+
+    queue->num++;
+    return data;
+}
+
+void *queue_pop(queue_head *queue) {
+    queue_entry *entry;
+    void *data;
+
+    if (!queue || !queue->head) {
+        errorf("queue is NULL");
+        return NULL;
+    }
+
+    entry = queue->head;
+    queue->head = entry->next;
+    if (!queue->head) {
+        queue->tail = NULL;
+    }
+    queue->num--;
+
+    data = entry->data;
+    memory_free(entry);
+    return data;
+}
+
+void *queue_peek(queue_head *queue) {
+    if (!queue || !queue->head) {
+        errorf("queue is NULL");
+        return NULL;
+    }
+    return queue->head->data;
+}
+
+void queue_foreach(queue_head *queue, void (*func)(void *arg, void *data), void *arg) {
+    queue_entry *entry;
+
+    if (!queue || !func) {
+        errorf("queue or func is NULL");
+        return;
+    }
+
+    for (entry = queue->head; entry; entry = entry->next) {
+        func(arg, entry->data);
+    }
 }
 
 // byteorder
