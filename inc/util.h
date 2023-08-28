@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdint.h>
 
+// array
+
+#define countof(x) ((sizeof(x) / sizeof(*x)))
+
 // logging
 
 #define errorf(...) lprintf(stderr, 'E', __FILE__, __LINE__, __func__, __VA_ARGS__)
@@ -26,5 +30,9 @@ extern uint16_t hton16(uint16_t x);
 extern uint32_t hton32(uint32_t x);
 extern uint16_t ntoh16(uint16_t x);
 extern uint32_t ntoh32(uint32_t x);
+
+// checksum
+
+extern uint16_t checksum16(uint16_t *addr, uint16_t count, uint32_t init);
 
 #endif //MICROPS_UTIL_H

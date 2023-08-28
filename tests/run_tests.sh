@@ -8,3 +8,6 @@ echo "---- hexdump ----"
 
 echo "--- byteorder ---"
 ./tests/byteorder
+
+echo "--- checksum ----"
+./tests/checksum

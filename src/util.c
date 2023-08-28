@@ -9,6 +9,7 @@
 #include <sys/time.h>
 
 // ANSI escape codes
+
 #define ANSI_RESET  "\e[0m"
 #define ANSI_RED    "\e[31m"
 #define ANSI_GREEN  "\e[32m"
@@ -133,4 +134,25 @@ uint32_t ntoh32(uint32_t x) {
         endian = get_byteorder();
     }
     return (endian == BYTEORDER_LITTLE_ENDIAN) ? byte_swap32(x) : x;
+}
+
+// checksum
+
+uint16_t checksum16(uint16_t *addr, uint16_t count, uint32_t init) {
+    uint32_t sum = init;
+
+    while (count > 1) {
+        sum += *addr++;
+        count -= 2;
+    }
+    // if count is odd then add the last 8 bits
+    if (count > 0) {
+        sum += *(uint8_t *)addr++;
+        count -= 1;
+    }
+    // add the carries
+    while (sum >> 16) {
+        sum = (sum & 0xffff) + (sum >> 16);
+    }
+    return ~(uint16_t)sum;
 }
