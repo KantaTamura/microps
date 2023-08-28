@@ -1,21 +1,10 @@
 #include "util.h"
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
 #include <stdarg.h>
 #include <ctype.h>
 #include <time.h>
 #include <sys/time.h>
-
-// ANSI escape codes
-
-#define ANSI_RESET  "\e[0m"
-#define ANSI_RED    "\e[31m"
-#define ANSI_GREEN  "\e[32m"
-#define ANSI_YELLOW "\e[33m"
-#define ANSI_BLUE   "\e[34m"
-#define ANSI_CYAN   "\e[36m"
 
 // logging
 
