@@ -339,4 +339,5 @@ int arp_init(void) {
         errorf("net_timer_register() failure");
         return -1;
     }
+    return 0;
 }
