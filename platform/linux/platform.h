@@ -14,10 +14,7 @@
 
 static inline void *memory_alloc(size_t size) { return calloc(1, size); }
 
-static inline void memory_free(void *ptr) {
-    debugf("free %p", ptr);
-    free(ptr);
-}
+static inline void memory_free(void *ptr) { free(ptr); }
 
 /*
  * Mutex
